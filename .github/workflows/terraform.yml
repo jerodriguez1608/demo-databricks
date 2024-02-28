@@ -49,6 +49,6 @@ jobs:
     - name: Terraform Apply
       run: terraform apply --auto-approve 
       env:
-        TF_VAR_databricks_host: ${{ secrets.DATABRICKS_URL_DEPLOY }}
-        TF_VAR_databricks_token: ${{ secrets.DATABRICKS_TOKEN_DEPLOY }}
+        databricks_host: ${{ secrets.DATABRICKS_URL_DEPLOY }}
+        databricks_token: ${{ secrets.DATABRICKS_TOKEN_DEPLOY }}
       working-directory : ${{env.ROOT_PATH}}
