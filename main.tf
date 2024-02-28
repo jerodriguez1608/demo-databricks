@@ -25,8 +25,8 @@ provider "azurerm" {
 
 # Use environment variables for authentication.
 provider "databricks" {
-  host  = "adb-144988797342511.11.azuredatabricks.net"
-  token = "dapie6921f56ad129e9caacfe99d429ac40f-3"
+  host  = ${{ secrets.DATABRICKS_URL_DEPLOY }} #"adb-144988797342511.11.azuredatabricks.net"
+  token = ${{ secrets.DATABRICKS_TOKEN_DEPLOY }} #"dapie6921f56ad129e9caacfe99d429ac40f-3"
   
 }
 
