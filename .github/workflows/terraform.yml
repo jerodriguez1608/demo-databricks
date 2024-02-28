@@ -41,6 +41,9 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan
+      env:
+        TF_VAR_databricks_host: ${{ secrets.DATABRICKS_URL_DEPLOY }}
+        TF_VAR_databricks_token: ${{ secrets.DATABRICKS_TOKEN_DEPLOY }}
       working-directory : ${{env.ROOT_PATH}}
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
