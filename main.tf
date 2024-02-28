@@ -10,8 +10,16 @@ terraform {
   }
 }
 
-variable "databricks_host" {}
-variable "databricks_token" {}
+variable "databricks_host" {
+  type = string
+  default = "nothost"
+}
+variable "databricks_token" {
+  type = string
+  default = "notoken"
+}
+
+
 
 locals {
   libraries = yamldecode(file("${path.module}/libraries.yaml"))
