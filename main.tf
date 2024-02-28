@@ -10,6 +10,9 @@ terraform {
   }
 }
 
+variable "databricks_host" {}
+variable "databricks_token" {}
+
 locals {
   libraries = yamldecode(file("${path.module}/libraries.yaml"))
   workflow  = yamldecode(file("${path.module}/workflow.yaml"))
@@ -25,8 +28,8 @@ provider "azurerm" {
 
 # Use environment variables for authentication.
 provider "databricks" {
-  host  = ${{ secrets.DATABRICKS_URL_DEPLOY }} #"adb-144988797342511.11.azuredatabricks.net"
-  token = ${{ secrets.DATABRICKS_TOKEN_DEPLOY }} #"dapie6921f56ad129e9caacfe99d429ac40f-3"
+  host  = var.databricks_host #${{secrets.DATABRICKS_URL_DEPLOY}} #"adb-144988797342511.11.azuredatabricks.net"
+  token = var.databricks_token #${{secrets.DATABRICKS_TOKEN_DEPLOY}} #"dapie6921f56ad129e9caacfe99d429ac40f-3"
   
 }
 
