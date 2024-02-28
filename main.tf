@@ -30,13 +30,13 @@ provider "databricks" {
   
 }
 
-resource "databricks_group" "auto" {
-  display_name = "Automation"
-}
+#resource "databricks_group" "auto" {
+  #display_name = "Automation"
+#}
 
-resource "databricks_group" "eng" {
-  display_name = "Engineering"
-}
+#resource "databricks_group" "eng" {
+  #display_name = "Engineering"
+#}
 
 data "databricks_spark_version" "latest" {}
 
