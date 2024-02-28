@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  ROOT_PATH: '../../'
+  ROOT_PATH: '${{ github.workspace }}'
 
 jobs:
   terraform:
@@ -41,7 +41,7 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -input=false
+      run: terraform plan
       working-directory : ${{env.ROOT_PATH}}
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
