@@ -12,11 +12,9 @@ terraform {
 
 variable "databricks_host" {
   type = string
-  default = "nothost"
 }
 variable "databricks_token" {
   type = string
-  default = "notoken"
 }
 
 
