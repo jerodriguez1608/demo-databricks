@@ -46,9 +46,12 @@ jobs:
       env:
         TF_VAR_databricks_host: ${{ secrets.DATABRICKS_URL_DEPLOY }}
         TF_VAR_databricks_token: ${{ secrets.DATABRICKS_TOKEN_DEPLOY }}
+        TF_VAR_environment: 'certification'
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
       working-directory : ${{env.ROOT_PATH}}
+      env:
+        TF_VAR_environment: 'certification'
       run: terraform apply --auto-approve -var="databricks_host=${{ secrets.DATABRICKS_URL_DEPLOY }}" -var="databricks_token=${{ secrets.DATABRICKS_TOKEN_DEPLOY }}"

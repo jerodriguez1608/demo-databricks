@@ -18,7 +18,10 @@ variable "databricks_token" {
   type = string
   sensitive = true
 }
-
+variable "environment" {
+  type = string
+  sensitive = true
+}
 
 
 locals {
@@ -65,7 +68,12 @@ resource "databricks_job" "this" {
     user_name =  local.workflow.dataengineer
   }
 
-  name = local.workflow.workflow
+  parameter {
+    name = var.environment
+    default = "without_environment"
+  }
+
+  name = local.workflow.workflow + "-" + var.environment
   max_concurrent_runs = 1
 
   #git_source {
