@@ -243,7 +243,7 @@ resource "databricks_job" "pipelines" {
 # }
 
 output "job_url" {
-  value = databricks_job.pipelines.*.url
+  value = databricks_job.pipelines
 }
 
 
