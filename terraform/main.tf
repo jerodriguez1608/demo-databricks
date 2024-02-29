@@ -73,7 +73,7 @@ resource "databricks_job" "this" {
     default = "without_environment"
   }
 
-  name = local.workflow.workflow + "-" + var.environment
+  name = "${local.workflow.workflow}-${var.environment}" 
   max_concurrent_runs = 1
 
   #git_source {
