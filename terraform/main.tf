@@ -83,11 +83,11 @@ resource "databricks_job" "this" {
   name = "${local.workflow.workflow}-${var.environment}" 
   max_concurrent_runs = 1
 
-  #git_source {
-    #url = ""
-    #branch = ""
-    #provider = ""
-  #}
+  git_source {
+    url = "https://github.com/jerodriguez1608/demo-databricks"
+    branch = var.branch_name
+    provider = "gitHub"
+  }
 
   
   # dynamic "schedule" {
@@ -127,7 +127,9 @@ resource "databricks_job" "this" {
         
         notebook_path = lookup ( local.templates , task.value.apply , task.value.apply) 
         
-        base_parameters =  task.value.params
+        base_parameters =  merge(task.value.params , 
+           {"branch" : var.branch_name,
+            "environment" : var.environment})
      
       }
 

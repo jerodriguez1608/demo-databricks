@@ -34,7 +34,7 @@ tasks:
         - cosmos
     cluster-name: ephimero-test1
   tsk-cloudFiles-topic01-bronze:
-    apply: /src/fdd/fff/flf
+    apply: src/First Notebook
     params:
       fullPath: nginx
       type: nginx
