@@ -1,0 +1,6 @@
+dev:
+  scheduler: 0 0 1 * * ?
+cer:
+  scheduler: 0 0 2 * * ?
+pro:
+  scheduler: 0 0 3 * * ?
