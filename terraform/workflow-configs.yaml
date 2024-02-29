@@ -1,6 +1,6 @@
 dev:
   scheduler: 0 0 1 * * ?
-cer:
+production:
   scheduler: 0 0 2 * * ?
-pro:
+certification:
   scheduler: 0 0 3 * * ?
