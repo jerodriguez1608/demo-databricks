@@ -22,7 +22,10 @@ variable "environment" {
   type = string
   sensitive = true
 }
-
+variable "branch_name" {
+  type = string
+  sensitive = true
+}
 
 locals {
   libraries = yamldecode(file("${path.module}/libraries.yaml"))
@@ -72,6 +75,11 @@ resource "databricks_job" "this" {
     default = "without_environment"
   }
 
+  parameter {
+    name = branch
+    default = var.branch_name
+  }
+  
   name = "${local.workflow.workflow}-${var.environment}" 
   max_concurrent_runs = 1
 
