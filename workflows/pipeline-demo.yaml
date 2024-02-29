@@ -1,5 +1,5 @@
 workflow: pipeline-bronze_exec_terraform
-dataengineer: kelly_rodriguez@gmail.com
+dataengineer: jhon_rodriguez1@usmp.pe
 schedule: continuous
 tasks:
   tsk-kafka-topic01-bronze:

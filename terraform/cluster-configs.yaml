@@ -1,4 +1,4 @@
-dev:
+certification:
   configs:
     "spark.hadoop.fs.azure.account.oauth2.client.endpoint" : "https://login.microsoftonline.com/5d93ebcc-f769-4380-8b7e-289fc972da1b/oauth2/token"
     "spark.hadoop.fs.azure.account.oauth.provider.type" : "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider"
@@ -8,13 +8,17 @@ dev:
     "spark.master" : "local[*, 4]"
     "spark.databricks.cluster.profile" : "singleNode"
   tags:
-    component : kafka_from_dd
+    environment : certification
+    cicd : gitactions
   policyId: C96178C1CF00011D
-cer:
+production:
   configs:
     "spark.hadoop.fs.azure.account.oauth2.client.endpoint" : "https://login.microsoftonline.com/5d93ebcc-f769-4380-8b7e-289fc972da1b/oauth2/token"
+    "spark.master" : "local[*, 4]"
+    "spark.databricks.cluster.profile" : "singleNode"
   tags:
-    component : kafka_from_dd
+    environment : production
+    cicd : gitactions
   policyId: XDDFF3334444
 pro:
   configs:

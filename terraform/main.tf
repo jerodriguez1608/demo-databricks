@@ -10,12 +10,26 @@ terraform {
   }
 }
 
+variable "databricks_host" {
+  type = string
+  sensitive = true
+}
+variable "databricks_token" {
+  type = string
+  sensitive = true
+}
+variable "environment" {
+  type = string
+  sensitive = true
+}
+
+
 locals {
   libraries = yamldecode(file("${path.module}/libraries.yaml"))
-  workflow  = yamldecode(file("${path.module}/workflow.yaml"))
+  workflow  = yamldecode(file("${path.module}/../workflows/pipeline-demo.yaml"))
   templates  = yamldecode(file("${path.module}/templates.yaml"))
-  cluster_configs = yamldecode(file("${path.module}/cluster-configs.yaml"))["dev"] 
-  workflow_configs  = yamldecode(file("${path.module}/workflow-configs.yaml"))["dev"] 
+  cluster_configs = yamldecode(file("${path.module}/cluster-configs.yaml"))[var.environment] 
+  workflow_configs  = yamldecode(file("${path.module}/workflow-configs.yaml"))[var.environment] 
 }
 
 
@@ -25,18 +39,18 @@ provider "azurerm" {
 
 # Use environment variables for authentication.
 provider "databricks" {
-  host  = "adb-144988797342511.11.azuredatabricks.net"
-  token = "dapie6921f56ad129e9caacfe99d429ac40f-3"
+  host  = var.databricks_host #${{secrets.DATABRICKS_URL_DEPLOY}} #"adb-144988797342511.11.azuredatabricks.net"
+  token = var.databricks_token #${{secrets.DATABRICKS_TOKEN_DEPLOY}} #"dapie6921f56ad129e9caacfe99d429ac40f-3"
   
 }
 
-resource "databricks_group" "auto" {
-  display_name = "Automation"
-}
+#resource "databricks_group" "auto" {
+  #display_name = "Automation"
+#}
 
-resource "databricks_group" "eng" {
-  display_name = "Engineering"
-}
+#resource "databricks_group" "eng" {
+  #display_name = "Engineering"
+#}
 
 data "databricks_spark_version" "latest" {}
 
@@ -47,21 +61,25 @@ locals {
 
 }
 
-
 resource "databricks_job" "this" {
 
   run_as {
     user_name =  local.workflow.dataengineer
   }
 
-  name = local.workflow.workflow
+  parameter {
+    name = var.environment
+    default = "without_environment"
+  }
+
+  name = "${local.workflow.workflow}-${var.environment}" 
   max_concurrent_runs = 1
 
-  git_source {
-    url = ""
-    branch = ""
-    provider = ""
-  }
+  #git_source {
+    #url = ""
+    #branch = ""
+    #provider = ""
+  #}
 
   
   # dynamic "schedule" {
@@ -98,7 +116,6 @@ resource "databricks_job" "this" {
 
 
       notebook_task {
-
         
         notebook_path = lookup ( local.templates , task.value.apply , task.value.apply) 
         
