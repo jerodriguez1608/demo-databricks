@@ -98,7 +98,7 @@ resource "databricks_job" "pipelines" {
   dynamic "schedule" {
     for_each =  [for k, data in [each.value.schedule]: data if  data != "continuous"] 
     content {
-      quartz_cron_expression = data
+      quartz_cron_expression = schedule.value
       timezone_id            = "America/Bogota"
       pause_status           = "UNPAUSED"
     }
