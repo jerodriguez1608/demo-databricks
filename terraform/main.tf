@@ -244,12 +244,6 @@ resource "databricks_job" "pipelines" {
 
 output "job_url" {
   value = databricks_job.pipelines
+  sensitive = true
 }
 
-output "path" {
-  value = "${path.module}/workflow-configs.yaml"
-}
-
-output "pat2h" {
-  value = path.module
-}
