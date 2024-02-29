@@ -250,5 +250,6 @@ output "path" {
   value = "${path.module}/workflow-configs.yaml"
 }
 
-
-
+output "pat2h" {
+  value = path.module
+}
