@@ -34,7 +34,7 @@ locals {
   cluster_configs = yamldecode(file("${path.module}/cluster-configs.yaml"))[var.environment] 
   workflow_configs  = yamldecode(file("${path.module}/workflow-configs.yaml"))[var.environment] 
   
-  workflows = {for k , relativePath in fileset(path.module, "workflows/*.yaml" ) : 
+  workflows = {for k , relativePath in fileset(path.module, "../workflows/*.yaml" ) : 
   k => yamldecode(file("${path.module}/${relativePath}"))}
 
 }
