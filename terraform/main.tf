@@ -246,4 +246,9 @@ output "job_url" {
   value = databricks_job.pipelines
 }
 
+output "path" {
+  value = "${path.module}/workflow-configs.yaml"
+}
+
+
 
