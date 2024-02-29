@@ -1,4 +1,4 @@
-KafkaTemplate: /KafkaTemplateToDelta
-CosmosTemplate: /CosmosTemplateToDelta
+KafkaTemplate: src/KafkaTemplateToDelta
+CosmosTemplate: src/CosmosTemplateToDelta
 CloudFilesTemplate: /CloudFilesTemplateToDelta
       
