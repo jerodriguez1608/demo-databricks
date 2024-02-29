@@ -23,7 +23,7 @@ variable "databricks_token" {
 
 locals {
   libraries = yamldecode(file("${path.module}/libraries.yaml"))
-  workflow  = yamldecode(file("${path.module}/workflow.yaml"))
+  workflow  = yamldecode(file("${path.module}/../workflows/pipeline-demo.yaml"))
   templates  = yamldecode(file("${path.module}/templates.yaml"))
   cluster_configs = yamldecode(file("${path.module}/cluster-configs.yaml"))["dev"] 
   workflow_configs  = yamldecode(file("${path.module}/workflow-configs.yaml"))["dev"] 

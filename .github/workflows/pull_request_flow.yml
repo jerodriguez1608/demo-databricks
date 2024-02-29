@@ -10,14 +10,13 @@ permissions:
 
 env:
   ROOT_PATH: '${{ github.workspace }}/terraform'
-  ENVIRONMENT: certification
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+  BRANCH_NAME: '${{ github.head_ref || github.ref_name }}' 
 
 jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: ${{env.ENVIRONMENT}}
+    environment: certification
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:

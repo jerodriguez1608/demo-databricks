@@ -10,13 +10,13 @@ permissions:
 
 env:
   ROOT_PATH: '${{ github.workspace }}'
-  ENVIRONMENT: production
-
+  BRANCH_NAME: '${{ github.head_ref || github.ref_name }}'
+  
 jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: ${{env.ENVIRONMENT}}
+    environment: production
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
