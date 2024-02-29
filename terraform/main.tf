@@ -76,10 +76,10 @@ resource "databricks_job" "this" {
   }
 
   parameter {
-    name = branch
+    name = "branch"
     default = var.branch_name
   }
-  
+
   name = "${local.workflow.workflow}-${var.environment}" 
   max_concurrent_runs = 1
 
