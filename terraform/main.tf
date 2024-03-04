@@ -29,10 +29,14 @@ variable "branch_name" {
 
 locals {
   libraries = yamldecode(file("${path.module}/libraries.yaml"))
-  workflow  = yamldecode(file("${path.module}/../workflows/pipeline-demo.yaml"))
+  # workflow  = yamldecode(file("${path.module}/../workflows/pipeline-demo.yaml"))
   templates  = yamldecode(file("${path.module}/templates.yaml"))
   cluster_configs = yamldecode(file("${path.module}/cluster-configs.yaml"))[var.environment] 
   workflow_configs  = yamldecode(file("${path.module}/workflow-configs.yaml"))[var.environment] 
+  
+  workflows = {for k , relativePath in fileset(path.module, "../workflows/*.yaml" ) : 
+  k => yamldecode(file("${path.module}/${relativePath}"))}
+
 }
 
 
@@ -64,10 +68,11 @@ locals {
 
 }
 
-resource "databricks_job" "this" {
+resource "databricks_job" "pipelines" {
+  for_each = local.workflows
 
   run_as {
-    user_name =  local.workflow.dataengineer
+    user_name =  each.value.dataengineer
   }
 
   parameter {
@@ -80,7 +85,7 @@ resource "databricks_job" "this" {
     default = var.branch_name
   }
 
-  name = "${local.workflow.workflow}-${var.environment}" 
+  name = "${each.value.workflow}-${var.environment}" 
   max_concurrent_runs = 1
 
   git_source {
@@ -90,27 +95,27 @@ resource "databricks_job" "this" {
   }
 
   
-  # dynamic "schedule" {
-  #   for_each =  [for k, data in [local.workflow.schedule]: data if  data != "continuous"] 
-  #   content {
-  #     quartz_cron_expression = data
-  #     timezone_id            = "America/Bogota"
-  #     pause_status           = "UNPAUSED"
-  #   }
+  dynamic "schedule" {
+    for_each =  [for k, data in [each.value.schedule]: data if  data != "continuous"] 
+    content {
+      quartz_cron_expression = schedule.value
+      timezone_id            = "America/Bogota"
+      pause_status           = "UNPAUSED"
+    }
     
-  # }
+  }
 
-  # dynamic "continuous" {
-  #   for_each =   [for k, data in [local.workflow.schedule]: data if  data == "continuous"] 
-  #   content {
-  #     pause_status = "PAUSED"
-  #   }
-  # }
+  dynamic "continuous" {
+    for_each =   [for k, data in [each.value.schedule]: data if  data == "continuous"] 
+    content {
+      pause_status = "PAUSED"
+    }
+  }
 
 
   dynamic "task" {
 
-    for_each = { for k, bd in local.workflow.tasks : k => bd }
+    for_each = { for k, bd in each.value.tasks : k => bd }
 
 
 
@@ -176,7 +181,7 @@ resource "databricks_job" "this" {
   ##mejorar
   dynamic "job_cluster" {
 
-    for_each = { for k, data in local.workflow.clusters : k => data }
+    for_each = { for k, data in each.value.clusters : k => data }
 
     content {
       job_cluster_key = job_cluster.key
@@ -184,7 +189,7 @@ resource "databricks_job" "this" {
         custom_tags = merge(
           {
             "ResourceClass" : "SingleNode",
-            "pip-yape-users" : local.workflow.workflow
+            "pip-yape-users" : each.value.workflow
           }, 
           local.cluster_configs.tags,
           job_cluster.value.tags
@@ -213,7 +218,7 @@ resource "databricks_job" "this" {
 
 
 # resource "databricks_permissions" "job_usage" {
-#   job_id = databricks_job.this.id
+#   job_id = databricks_job.pipelines
 
 #   dynamic "access_control" {
 #     content {
@@ -238,7 +243,7 @@ resource "databricks_job" "this" {
 # }
 
 output "job_url" {
-  value = databricks_job.this.url
+  value = databricks_job.pipelines
+  sensitive = true
 }
-
 
